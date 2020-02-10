@@ -7,6 +7,7 @@ class App extends Component {
     values: []
   }
 
+  // when component has mounted update the state, adding data.
   componentDidMount() {
     this.setState({
       values: [{id: 1, name: 'Value 101'}, {id: 2, name: 'Value 102'}]
