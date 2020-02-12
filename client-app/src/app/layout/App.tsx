@@ -12,6 +12,7 @@ const App = () => {
 
   const handleSelectActivity = (id: string) => {
     setSelectedActivity(activities.filter(a => a.id === id)[0]);
+    setEditMode(false);
   }
 
   const handleOpenCreateForm = () => {
@@ -35,6 +36,11 @@ const App = () => {
     axios
       .get<IActivity[]>('http://localhost:5000/api/activities')
       .then(response => {
+        let activities = [];
+        response.data.forEach(activity => {
+          activity.date = activity.date.split('.')[0];
+          activities.push(activity);
+        })
         setActivities(response.data);
       });
   }, []); // empty array [] as second parameter ensures useEffect only runs once and not continuously.
