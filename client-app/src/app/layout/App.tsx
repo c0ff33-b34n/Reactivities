@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { Container } from 'semantic-ui-react';
-import axios from 'axios';
 import { IActivity } from '../models/activity';
 import { NavBar } from '../../features/nav/NavBar';
 import { ActivityDashboard } from '../../features/activities/dashboard/ActivityDashboard';
+import agent from '../api/agent';
 
 const App = () => {
   const [activities, setActivities] = useState<IActivity[]>([]);
@@ -37,15 +37,14 @@ const App = () => {
   }
 
   useEffect(() => {
-    axios
-      .get<IActivity[]>('http://localhost:5000/api/activities')
+    agent.Activities.list()
       .then(response => {
         let activities = [];
-        response.data.forEach(activity => {
+        response.forEach(activity => {
           activity.date = activity.date.split('.')[0];
           activities.push(activity);
         })
-        setActivities(response.data);
+        setActivities(response);
       });
   }, []); // empty array [] as second parameter ensures useEffect only runs once and not continuously.
 
