@@ -1,6 +1,9 @@
 import React, { useState, FormEvent, useContext, useEffect } from 'react';
 import { Segment, Form, Button, Grid } from 'semantic-ui-react';
-import { IActivityFormValues, ActivityFormValues } from '../../../app/models/activity';
+import {
+  IActivityFormValues,
+  ActivityFormValues
+} from '../../../app/models/activity';
 import { v4 as uuid } from 'uuid';
 import ActivityStore from '../../../app/stores/activityStore';
 import { observer } from 'mobx-react-lite';
@@ -37,36 +40,25 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
   useEffect(() => {
     if (match.params.id) {
       setLoading(true);
-      loadActivity(match.params.id).then(
-        (activity) => setActivity(new ActivityFormValues(activity))
-      ).finally(() => setLoading(false));
-    };
-  }, [
-    loadActivity,
-    match.params.id,
-  ]);
-
-  // const handleSubmit = () => {
-  //   if (activity.id.length === 0) {
-  //     let newActivity = {
-  //       ...activity,
-  //       id: uuid()
-  //     };
-  //     createActivity(newActivity).then(() =>
-  //       history.push(`/activities/${newActivity.id}`)
-  //     );
-  //   } else {
-  //     editActivity(activity).then(() =>
-  //       history.push(`/activities/${activity.id}`)
-  //     );
-  //   }
-  // };
+      loadActivity(match.params.id)
+        .then(activity => setActivity(new ActivityFormValues(activity)))
+        .finally(() => setLoading(false));
+    }
+  }, [loadActivity, match.params.id]);
 
   const handleFinalFormSubmit = (values: any) => {
     const dateAndTime = combineDateAndTime(values.date, values.time);
-    const {date, time, ...activity} = values;
+    const { date, time, ...activity } = values;
     activity.date = dateAndTime;
-    console.log(activity);
+    if (!activity.id) {
+      let newActivity = {
+        ...activity,
+        id: uuid()
+      };
+      createActivity(newActivity);
+    } else {
+      editActivity(activity);
+    }
   };
 
   const handleInputChange = (
@@ -84,8 +76,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
             initialValues={activity}
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit }) => (
-              <Form onSubmit={handleSubmit}
-                loading={loading}>
+              <Form onSubmit={handleSubmit} loading={loading}>
                 <Field
                   name="title"
                   placeholder="Title"
