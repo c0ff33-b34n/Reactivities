@@ -50,6 +50,7 @@ class ActivityStore {
         let activity = this.getActivity(id); // if user browses to activity from ActivityList activityRegistry will contain Activity data
         if (activity) {
             this.activity = activity;
+            return activity;
         } else { // if user refreshes ActivityDetails page or goes directly from saved browser bookmark/favourite
             this.loadingInitial = true;
             try {
@@ -59,6 +60,7 @@ class ActivityStore {
                     this.activity = activity;
                     this.loadingInitial = false;
                 })
+                return activity;
             } catch (error) {
                 runInAction('get activity error', () => {
                     this.loadingInitial = false;
