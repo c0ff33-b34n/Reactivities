@@ -8,6 +8,6 @@ export interface IProfile {
 
 export interface IPhoto {
     id: string,
-    ulr: string,
+    url: string,
     isMain: boolean
 }
