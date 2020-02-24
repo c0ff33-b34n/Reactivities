@@ -23,8 +23,6 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
 
     if (loadingProfile) return <LoadingComponent content='Loading profile...' />
 
-    console.log("Profile: " + JSON.stringify(profile))
-
     return (
         <Grid>
             <Grid.Column width={16}>
