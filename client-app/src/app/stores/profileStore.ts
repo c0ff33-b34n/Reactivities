@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 
 export default class ProfileStore {
     rootStore: RootStore;
+    userProfile: IProfile | null = null;
     constructor(rootStore: RootStore) {
         this.rootStore = rootStore;
 
@@ -132,10 +133,12 @@ export default class ProfileStore {
     @action follow = async (username: string) => {
         this.loading = true;
         try {
-            await agent.Profiles.follow(username);
+            await agent.Profiles.follow(username)
+            const userProfile = await agent.Profiles.get(this.rootStore.userStore.user!.username);
             runInAction(() => {
                 this.profile!.following = true;
-                this.profile!.followersCount++;
+                this.profile!.followersCount++;                
+                this.followings = [...this.followings, userProfile];
                 this.loading = false;
             })
         } catch (error) {
@@ -153,6 +156,7 @@ export default class ProfileStore {
             runInAction(() => {
                 this.profile!.following = false;
                 this.profile!.followersCount--;
+                this.followings = this.followings.filter(x => x.userName !== this.rootStore.userStore.user!.username);
                 this.loading = false;
             })
         } catch (error) {
