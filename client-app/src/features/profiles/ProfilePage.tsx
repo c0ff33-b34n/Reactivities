@@ -26,8 +26,9 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
     } = rootStore.profileStore;
 
     useEffect(() => {
-        loadProfile(match.params.username)
-    }, [loadProfile, match])
+        loadProfile(match.params.username);
+        setActiveTab(0);
+    }, [loadProfile, match, setActiveTab])
 
     if (loadingProfile) return <LoadingComponent content='Loading profile...' />
 
