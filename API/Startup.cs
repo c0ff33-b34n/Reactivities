@@ -129,6 +129,9 @@ namespace API
 
             // app.UseHttpsRedirection();
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             // When request comes in to API, API needs to route it to the appropriate controller
             app.UseRouting(); // This middleware enables that functionality.
             app.UseCors("CorsPolicy");
@@ -140,6 +143,7 @@ namespace API
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<ChatHub>("/chat");
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }
