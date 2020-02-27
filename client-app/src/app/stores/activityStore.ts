@@ -1,4 +1,4 @@
-import { observable, action, computed, runInAction, reaction } from 'mobx';
+import { observable, action, computed, runInAction, reaction, toJS } from 'mobx';
 import { SyntheticEvent } from 'react';
 import { IActivity } from '../models/activity';
 import agent from '../api/agent';
@@ -153,7 +153,7 @@ export default class ActivityStore {
         let activity = this.getActivity(id); // if user browses to activity from ActivityList activityRegistry will contain Activity data
         if (activity) {
             this.activity = activity;
-            return activity;
+            return toJS(activity);
         } else { // if user refreshes ActivityDetails page or goes directly from saved browser bookmark/favourite
             this.loadingInitial = true;
             try {
